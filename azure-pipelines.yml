@@ -42,3 +42,10 @@ stages:
         publishTestResults: true
         projects: 'tests/Blogifier.Tests/*.csproj'
 
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      condition: succeeded()
+      inputs:
+        pathToPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: MyBuildOutputs
+
