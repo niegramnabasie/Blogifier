@@ -21,11 +21,12 @@ stages:
       vmImage: 'windows-latest'
 
     steps:
-    - task: NuGetToolInstaller@1
 
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
       inputs:
-        restoreSolution: '$(solution)'
+        command: 'restore'
+        projects: 'src/Blogifier/*.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build project'
@@ -42,10 +43,6 @@ stages:
         publishTestResults: true
         projects: 'tests/Blogifier.Tests/*.csproj'
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      condition: succeeded()
-      inputs:
-        pathToPublish: $(Build.ArtifactStagingDirectory)
-        artifactName: MyBuildOutputs
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: App
 
