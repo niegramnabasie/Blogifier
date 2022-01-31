@@ -27,16 +27,18 @@ stages:
       inputs:
         restoreSolution: '$(solution)'
 
-    - task: VSBuild@1
+    - task: DotNetCoreCLI@2
+      displayName: 'Build project'
       inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-
-    - task: VSTest@2
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: 'src/Blogifier/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run tests'
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-        
+        command: test
+        arguments: --configuration $(buildConfiguration)
+        publishTestResults: true
+        projects: 'tests/Blogifier.Tests/*.csproj'
 
