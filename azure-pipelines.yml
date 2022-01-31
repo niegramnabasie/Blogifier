@@ -7,8 +7,6 @@ trigger:
 - main
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 stages:
@@ -43,8 +41,12 @@ stages:
         publishTestResults: true
         projects: 'tests/Blogifier.Tests/*.csproj'
 
-    - task: PublishBuildArtifacts@1
+    - task: CopyFiles@2
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-        artifactName: 'App'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'    
+
+    - task: PublishBuildArtifacts@1    
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'    
 
