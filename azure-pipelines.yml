@@ -43,6 +43,8 @@ stages:
         publishTestResults: true
         projects: 'tests/Blogifier.Tests/*.csproj'
 
-    - publish: '$(Build.ArtifactStagingDirectory)'
-      artifact: App
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: 'App'
 
